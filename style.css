@@ -20,17 +20,17 @@ h1, h2, h3 {
     flex: 33%;
 }
 .setosa {
-	fill: mediumseagreen;
+	fill: green;
 	opacity: 50%;
 }
 
 .versicolor {
-	fill: lightcoral;
+	fill: red;
 	opacity: 50%;
 }
 
 .virginica {
-	fill: cornflowerblue;
+	fill: blue;
 	opacity: 50%;
 }
 .selected {

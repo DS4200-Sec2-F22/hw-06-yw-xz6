@@ -41,7 +41,7 @@ d3.csv("data/iris.csv").then((data) => {
     const Y_SCALE_LEFT = d3.scaleLinear() 
             .domain([0, MAX_Y_LEFT + 1]) // add some padding  
             .range([VIS_HEIGHT, 0]);
-  // add our circles with styling 
+    // add our circles with styling 
     left = LEFT.selectAll("circle") 
             .data(data) // this is passed from  .then()
             .enter()  
@@ -120,50 +120,50 @@ const Y_SCALE_RIGHT = d3.scaleLinear()
 
 // add x-axis
 RIGHT.append("g")
-					.attr("transform", "translate(" + MARGINS.left + "," + (VIS_HEIGHT + MARGINS.top) + ")")
-					.call(d3.axisBottom(X_SCALE_RIGHT).tickFormat((i) => {return BAR_DATA[i].Species}))
-						.attr("font-size", "20px");
+		.attr("transform", "translate(" + MARGINS.left + "," + (VIS_HEIGHT + MARGINS.top) + ")")
+		.call(d3.axisBottom(X_SCALE_RIGHT).tickFormat((i) => {return BAR_DATA[i].Species}))
+			.attr("font-size", "20px");
 
 // add y-axis
 RIGHT.append("g")
-					.attr("transform", "translate(" + MARGINS.left + "," + MARGINS.top + ")")
-					.call(d3.axisLeft(Y_SCALE_RIGHT).ticks(8))
-						.attr("font-size", "15px");
+		.attr("transform", "translate(" + MARGINS.left + "," + MARGINS.top + ")")
+		.call(d3.axisLeft(Y_SCALE_RIGHT).ticks(8))
+			.attr("font-size", "15px");
 
 // create bars for each species 
 bars = RIGHT.selectAll("bars")
-							.data(BAR_DATA)
-							.enter()
-							.append("rect")
-								.attr("x", (d,i) => {return MARGINS.left + X_SCALE_RIGHT(i)})
-								.attr("y", (d) => {return MARGINS.top + Y_SCALE_RIGHT(d.Count)})
-								.attr("width", X_SCALE_RIGHT.bandwidth())
-								.attr("height", (d) => {return VIS_HEIGHT - Y_SCALE_RIGHT(d.Count)})
-								.attr("class", (d) => {return d.Species});
+				.data(BAR_DATA)
+				.enter()
+				.append("rect")
+					.attr("x", (d,i) => {return MARGINS.left + X_SCALE_RIGHT(i)})
+					.attr("y", (d) => {return MARGINS.top + Y_SCALE_RIGHT(d.Count)})
+					.attr("width", X_SCALE_RIGHT.bandwidth())
+					.attr("height", (d) => {return VIS_HEIGHT - Y_SCALE_RIGHT(d.Count)})
+					.attr("class", (d) => {return d.Species});
 
 MIDDLE.call(d3.brush()
 						.extent([[MARGINS.left,MARGINS.top], [FRAME_WIDTH,(FRAME_HEIGHT - MARGINS.bottom)]])
 						.on("brush end", highlight_charts));
 
 
-		//function to highlight points/bars when brushed in middle plot
+//function to highlight points/bars when brushed in middle plot
 function highlight_charts(event) {
 
-			// coordinates of the selected region
+	// coordinates of the selected region
 	const selection = event.selection;
 
-		    // empty set to store selected species names
+	// empty set to store selected species names
 	let selectedSpecies = new Set();
 
-		    // clears highlights when brush restarts
+	// clears highlights when brush restarts
 	if (selection === null) {
 		mid.classed('selected', false);
 		left.classed('selected', false);
 		bars.classed("selected", false);
 	} 
-		    // gives the border/opacity for all plots
+	// gives the border/opacity for all plots
 	else {
-		    	// selected class for middle plot, also adds class to set for bar plots
+		// selected class for middle plot, also adds class to set for bar plots
 		mid.classed("selected", (d) => {
 		isSelected = isBrushed(selection, (MARGINS.left + X_SCALE_MID(d.Sepal_Width)), (MARGINS.top + Y_SCALE_MID(d.Petal_Width)));
 		if (isSelected) {
@@ -171,16 +171,16 @@ function highlight_charts(event) {
 		}
 	    return isSelected});
 
-		    	// highlights corresponding points in the left plot
+		// highlights corresponding points in the left plot
 		left.classed("selected", (d) => isBrushed(selection, (MARGINS.left + X_SCALE_MID(d.Sepal_Width)), 
         (MARGINS.top + Y_SCALE_MID(d.Petal_Width))));
 		    	
-				// highlights bars based on class being in the selectedSpecies set
+		// highlights bars based on class being in the selectedSpecies set
 		bars.classed("selected", (d) => {return selectedSpecies.has(d.Species);})
 	};
 };
 
-		// returns if a point is in the brush selection
+// returns if a point is in the brush selection
 function isBrushed(brush_coords, cx, cy) {
 	let x0 = brush_coords[0][0];
 	let x1 = brush_coords[1][0];
